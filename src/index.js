@@ -29,14 +29,6 @@ function onChangeInput() {
 }
 
 
-// function checkQuantity(arrContries) {
-//   if (arrContries.length > 10) {
-//   throw  Notify.info('Too many matches found. Please enter a more specific name.')
-    
-//   }
-//   return arrContries;
-// };
-
 function cleanMarkup() {
   if (refs.outputListCountri.innerHTML === '' 
   ) {
@@ -48,39 +40,39 @@ function cleanMarkup() {
   }
 }
 
-
-
-function renderCountriesList(countries) {
-  if (countries.length > 10) {
-    Notify.info('Too many matches found. Please enter a more specific name.');
-  }
-  if (countries.length === 1) {
-      cleanMarkup()
-      const languages = Object.values(countries[0].languages).join(', ');
-      const markupCountri = `<h3><img src="${countries[0].flags.svg}" alt="${countries[0].flags.alt}" height="30"  width="35">
+function renderOneCountri(countries) {
+  const languages = Object.values(countries[0].languages).join(', ');
+  const markupCountri = `<h3><img src="${countries[0].flags.svg}" alt="${countries[0].flags.alt}" height="30"  width="35">
 ${countries[0].name.official}</h3>
       <p>Capital: ${countries[0].capital}</p>
       <p>Population: ${countries[0].population}</p>
       <p>Languages: ${languages}</p>`;
 
-      refs.outputOneCountri.innerHTML = markupCountri;
-  } else {
-    cleanMarkup();
-      const markupListcCountries = countries
-        .map(countri =>
-          `<li class='li-countri'>
+  refs.outputOneCountri.innerHTML = markupCountri;
+}
+function renderMoreCountries(countries) {
+ const markupListcCountries = countries
+   .map(
+     countri =>
+       `<li class='li-countri'>
           <img src="${countri.flags.svg}" alt="${countri.flags.alt}" height="30"  width="35">
 <p>${countri.name.official}</p>
         </li>`
-        ).join('');
-      refs.outputListCountri.innerHTML = markupListcCountries;
-    }
+   )
+   .join('');
+ refs.outputListCountri.innerHTML = markupListcCountries;
 }
 
-// 'Oops, there is no country with that name'
-// 'Too many matches found. Please enter a more specific name.'
-// name.official - полное имя страны
-// capital - столица
-// population - население
-// flags.svg - ссылка на изображение флага
-// languages - массив языков
+function renderCountriesList(countries) {
+  if (countries.length > 10) {
+    Notify.info('Too many matches found. Please enter a more specific name.');
+    return
+  }
+  if (countries.length === 1) {
+      cleanMarkup()
+      renderOneCountri(countries);
+  } else {
+    cleanMarkup();
+     renderMoreCountries(countries);
+    }
+}
