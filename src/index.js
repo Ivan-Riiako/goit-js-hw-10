@@ -23,20 +23,19 @@ function onChangeInput() {
     return;
   }
   fetchCountries(inputValue)
-    .then(quantityСheck)
+    // .then(checkQuantity)
     .then(renderCountriesList)
-    .catch(Notify.info);
+    .catch(Notify.failure);
 }
 
 
-function quantityСheck(arrContries) {
-  if (arrContries.length === 0) {
-  return}
-    if (arrContries.length > 10) {
-      throw 'Too many matches found. Please enter a more specific name.';
-    }
-  return arrContries;
-};
+// function checkQuantity(arrContries) {
+//   if (arrContries.length > 10) {
+//   throw  Notify.info('Too many matches found. Please enter a more specific name.')
+    
+//   }
+//   return arrContries;
+// };
 
 function cleanMarkup() {
   if (refs.outputListCountri.innerHTML === '' 
@@ -52,7 +51,9 @@ function cleanMarkup() {
 
 
 function renderCountriesList(countries) {
- 
+  if (countries.length > 10) {
+    Notify.info('Too many matches found. Please enter a more specific name.');
+  }
   if (countries.length === 1) {
       cleanMarkup()
       const languages = Object.values(countries[0].languages).join(', ');

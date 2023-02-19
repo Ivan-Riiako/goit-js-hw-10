@@ -1,5 +1,4 @@
 export { fetchCountries };
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 function fetchCountries(name) {
   return fetch(
@@ -9,8 +8,9 @@ function fetchCountries(name) {
       if (!response.ok) {
         // Notify.failure('Oops, there is no country with that name');
         throw 'Oops, there is no country with that name';
-      }
+        }
+        
       return response.json();
-    }).catch(Notify.failure)
+    })
     
 }
