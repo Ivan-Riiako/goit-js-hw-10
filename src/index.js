@@ -1,6 +1,9 @@
 import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 var debounce = require('lodash.debounce');
+
+import { fetchCountries } from './fetchCountries'
+
 const DEBOUNCE_DELAY = 300;
 const refs = {
   inputCountry: document.querySelector('input#search-box'),
@@ -10,59 +13,71 @@ const refs = {
 
 refs.inputCountry.addEventListener(
   'input',
-    debounce(onFeachInput, DEBOUNCE_DELAY)
+    debounce(onChangeInput, DEBOUNCE_DELAY)
 );
-function onFeachInput() {
-    const inputValue = refs.inputCountry.value.trim();
-    fetchCountries(inputValue)
-      .then(users => renderCountriesList(users))
-      .catch(error =>
-        Notify.failure("Oops, there is no country with that name")
-      );
+
+function onChangeInput() {
+  const inputValue = refs.inputCountry.value.trim();
+  if (inputValue === '') {
+    cleanMarkup();
+    return;
+  }
+  fetchCountries(inputValue)
+    .then(quantityСheck)
+    .then(renderCountriesList)
+    .catch(Notify.info);
 }
 
 
-
-
-
-
-function fetchCountries(name) {
-  return fetch(`https://restcountries.com/v3.1/name/${name}`).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
+function quantityСheck(arrContries) {
+  if (arrContries.length === 0) {
+  return}
+    if (arrContries.length > 10) {
+      throw 'Too many matches found. Please enter a more specific name.';
     }
-    return response.json();
-  });
+  return arrContries;
+};
+
+function cleanMarkup() {
+  if (refs.outputListCountri.innerHTML === '' 
+  ) {
+    refs.outputOneCountri.innerHTML = '';
+  } else if (
+    refs.outputOneCountri.innerHTML === '' 
+  ) {
+    refs.outputListCountri.innerHTML = '';
+  }
 }
+
+
 
 function renderCountriesList(countries) {
-    if (countries.length === 1) {
-const languages=Object.values(countries[0].languages).join(', ');
-// console.log(languages);
-        const markup =
-`<h3><img src="${countries[0].flags.svg}" alt="${countries[0].name.official}" height="30"  width="35">
+ 
+  if (countries.length === 1) {
+      cleanMarkup()
+      const languages = Object.values(countries[0].languages).join(', ');
+      const markupCountri = `<h3><img src="${countries[0].flags.svg}" alt="${countries[0].flags.alt}" height="30"  width="35">
 ${countries[0].name.official}</h3>
       <p>Capital: ${countries[0].capital}</p>
       <p>Population: ${countries[0].population}</p>
       <p>Languages: ${languages}</p>`;
 
-      refs.outputListCountri.innerHTML = markup;
-    } else {
-        const markupList =
-            countries
-        .map(countri => {
-          return `<li class='li-countri'>
-          <img src="${countri.flags.svg}" alt="${countri.name.official}" height="30"  width="35">
+      refs.outputOneCountri.innerHTML = markupCountri;
+  } else {
+    cleanMarkup();
+      const markupListcCountries = countries
+        .map(countri =>
+          `<li class='li-countri'>
+          <img src="${countri.flags.svg}" alt="${countri.flags.alt}" height="30"  width="35">
 <p>${countri.name.official}</p>
-        </li>`;
-        })
-        .join('');
-      refs.outputListCountri.innerHTML = markupList;
+        </li>`
+        ).join('');
+      refs.outputListCountri.innerHTML = markupListcCountries;
     }
 }
 
-
-
+// 'Oops, there is no country with that name'
+// 'Too many matches found. Please enter a more specific name.'
 // name.official - полное имя страны
 // capital - столица
 // population - население
