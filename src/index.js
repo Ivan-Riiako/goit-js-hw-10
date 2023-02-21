@@ -70,10 +70,8 @@ function renderCountriesList(countries) {
     return
   }
   if (countries.length === 1) {
-      cleanMarkup()
       renderOneCountri(countries);
   } else {
-    cleanMarkup();
      renderMoreCountries(countries);
     }
 }
