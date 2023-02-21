@@ -22,6 +22,7 @@ function onChangeInput() {
     cleanMarkup();
     return;
   }
+  cleanMarkup();
   fetchCountries(inputValue)
     // .then(checkQuantity)
     .then(renderCountriesList)
