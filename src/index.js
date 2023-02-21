@@ -29,7 +29,6 @@ function onChangeInput() {
     .catch(Notify.failure);
 }
 
-
 function cleanMarkup() {
   if (refs.outputListCountri.innerHTML === '' 
   ) {
@@ -51,6 +50,7 @@ ${countries[0].name.official}</h3>
 
   refs.outputOneCountri.innerHTML = markupCountri;
 }
+
 function renderMoreCountries(countries) {
  const markupListcCountries = countries
    .map(
