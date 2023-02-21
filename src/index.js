@@ -18,11 +18,10 @@ refs.inputCountry.addEventListener(
 
 function onChangeInput() {
   const inputValue = refs.inputCountry.value.trim();
+  cleanMarkup();
   if (inputValue === '') {
-    cleanMarkup();
     return;
   }
-  cleanMarkup();
   fetchCountries(inputValue)
     // .then(checkQuantity)
     .then(renderCountriesList)
